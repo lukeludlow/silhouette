@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "dev.lukel.silhouette.SilhouetteMod"
+    ],
+    "client": [
+      "dev.lukel.silhouette.SilhouetteModClient"
     ]
   },
   "mixins": [
