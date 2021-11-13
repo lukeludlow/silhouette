@@ -16,18 +16,19 @@
   "license": "CC0-1.0",
   "icon": "assets/silhouette/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "dev.lukel.silhouette.SilhouetteMod"
-    ],
     "client": [
-      "dev.lukel.silhouette.SilhouetteModClient"
+      "dev.lukel.silhouette.SilhouetteClientMod"
+    ],
+    "modmenu": [
+      "dev.lukel.silhouette.options.ui.SilhouetteModMenu"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "silhouette.mixins.json"
   ],
+  "accessWidener": "silhouette.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.11.3",

@@ -1,5 +1,6 @@
 package dev.lukel.silhouette.mixin;
 
+import dev.lukel.silhouette.SilhouetteClientMod;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +16,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Override
     public boolean isGlowing() {
-        return true;
+        return SilhouetteClientMod.options().isEnabled;
     }
 }
