@@ -14,8 +14,6 @@
   "silhouette.options.render_distance_min.tooltip": "render distance min tooltip",
   "silhouette.options.render_distance_max.name": "render distance max",
   "silhouette.options.render_distance_max.tooltip": "render distance max tooltip",
-  "silhouette.options.should_outline_self.name": "third person",
-  "silhouette.options.should_outline_self.tooltip": "show outline around own player when in third person view. mainly used for debugging purposes.",
   "silhouette.options.should_outline_only_when_fully_hidden.name": "outline only when fully hidden",
   "silhouette.options.should_outline_only_when_fully_hidden.tooltip": "only display outline when player is completely hidden behind cover. this operation is somewhat expensive and might impact your fps!",
 

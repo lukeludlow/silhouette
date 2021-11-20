@@ -9,6 +9,10 @@
   - don't render outline beyond certain distance
   - only show outline if completely hidden behind cover
   - always show usernames 
+- keybind to quickly enable/disable silhouettes
+- custom glow (color, intensity, whatever else i can figure out)
+- bright/clearer gamertags 
+- smooth scaling of gamertag size
 
 ## Setup
 

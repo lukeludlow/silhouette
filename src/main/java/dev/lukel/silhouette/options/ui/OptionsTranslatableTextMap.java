@@ -11,7 +11,6 @@ public class OptionsTranslatableTextMap {
     public static final String shouldRenderWithinCertainRange = "silhouette.options.should_render_within_range";
     public static final String renderDistanceMin = "silhouette.options.render_distance_min";
     public static final String renderDistanceMax = "silhouette.options.render_distance_max";
-    public static final String shouldOutlineSelf = "silhouette.options.should_outline_self";
     public static final String outlineOnlyWhenFullyHidden = "silhouette.options.should_outline_only_when_fully_hidden";
 
     public static final Map<String, String> map = Map.ofEntries(
@@ -21,6 +20,5 @@ public class OptionsTranslatableTextMap {
             entry("shouldRenderWithinCertainRange", shouldRenderWithinCertainRange),
             entry("renderDistanceMin", renderDistanceMin),
             entry("renderDistanceMax", renderDistanceMax),
-            entry("shouldOutlineSelf", shouldOutlineSelf),
             entry("outlineOnlyWhenFullyHidden", outlineOnlyWhenFullyHidden));
 }

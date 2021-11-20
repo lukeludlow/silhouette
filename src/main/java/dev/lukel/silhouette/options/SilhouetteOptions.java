@@ -9,6 +9,5 @@ public class SilhouetteOptions {
     public int renderDistanceMin = 0;
     public int renderDistanceMax = 0;
     // mainly used for debugging
-    public boolean shouldOutlineSelf = false;
     public boolean outlineOnlyWhenFullyHidden = false;
 }
