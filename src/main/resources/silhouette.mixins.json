@@ -7,8 +7,11 @@
   ],
   "client": [
     "PlayerEntityRendererMixin",
-    "PlayerEntityMixin",
-    "WorldRendererMixin"
+    "ClientPlayerEntityMixin",
+    "OtherClientPlayerEntityMixin",
+    "LivingEntityRendererMixin",
+    "WorldRendererMixin",
+    "OutlineVertexConsumerProviderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

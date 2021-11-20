@@ -19,7 +19,6 @@ public class OptionsFileSave {
 
     public static void saveChanges(final SilhouetteOptions options) throws IOException {
 
-        System.out.println("here");
         final Path configPath = getConfigPath(DEFAULT_FILE_NAME);
         final Path dir = configPath.getParent();
 

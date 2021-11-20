@@ -22,9 +22,9 @@ public class SilhouetteOptionsStorage implements OptionStorage<SilhouetteOptions
         try {
             OptionsFileSave.saveChanges(options);
         } catch (IOException e) {
-            throw new RuntimeException("Couldn't save configuration changes", e);
+            throw new RuntimeException("couldn't save configuration changes", e);
         }
 
-        SilhouetteClientMod.LOGGER.info("Flushed changes to Sodium configuration");
+        SilhouetteClientMod.LOGGER.info("flushed changes to silhouette configuration");
     }
 }

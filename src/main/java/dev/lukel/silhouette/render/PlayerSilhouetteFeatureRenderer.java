@@ -1,4 +1,4 @@
-package dev.lukel.silhouette;
+package dev.lukel.silhouette.render;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;

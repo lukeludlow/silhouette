@@ -37,9 +37,9 @@ public class SilhouetteOptionsGui extends Screen {
 
     private OptionPage currentPage;
 
-    private FlatButtonWidget applyButton;
+//    private FlatButtonWidget applyButton;
     private FlatButtonWidget closeButton;
-    private FlatButtonWidget undoButton;
+//    private FlatButtonWidget undoButton;
 
     private boolean hasPendingChanges;
     private ControlElement<?> hoveredElement;
@@ -82,12 +82,12 @@ public class SilhouetteOptionsGui extends Screen {
         this.rebuildGUIPages();
         this.rebuildGUIOptions();
 
-        this.undoButton = new FlatButtonWidget(new Dim2i(this.width - 211, this.height - 30, 65, 20), new TranslatableText("silhouette.options.buttons.undo"), this::undoChanges);
-        this.applyButton = new FlatButtonWidget(new Dim2i(this.width - 142, this.height - 30, 65, 20), new TranslatableText("silhouette.options.buttons.apply"), this::applyChanges);
+//        this.undoButton = new FlatButtonWidget(new Dim2i(this.width - 211, this.height - 30, 65, 20), new TranslatableText("silhouette.options.buttons.undo"), this::undoChanges);
+//        this.applyButton = new FlatButtonWidget(new Dim2i(this.width - 142, this.height - 30, 65, 20), new TranslatableText("silhouette.options.buttons.apply"), this::applyChanges);
         this.closeButton = new FlatButtonWidget(new Dim2i(this.width - 73, this.height - 30, 65, 20), new TranslatableText("gui.done"), this::onClose);
 
-        this.addDrawableChild(this.undoButton);
-        this.addDrawableChild(this.applyButton);
+//        this.addDrawableChild(this.undoButton);
+//        this.addDrawableChild(this.applyButton);
         this.addDrawableChild(this.closeButton);
     }
 
@@ -132,7 +132,10 @@ public class SilhouetteOptionsGui extends Screen {
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
-        super.renderBackground(matrixStack);
+//        SilhouetteClientMod.LOGGER.info("silhouette gui render. super.getClass()=" + super.getClass().toString());
+//        super.renderBackground(matrixStack);
+
+        this.renderBackground(matrixStack, 69);
 
         this.updateControls();
 
@@ -140,6 +143,24 @@ public class SilhouetteOptionsGui extends Screen {
 
         if (this.hoveredElement != null) {
             this.renderOptionTooltip(matrixStack, this.hoveredElement);
+        }
+    }
+
+    @Override
+    public void renderBackground(MatrixStack matrices, int vOffset) {
+//        SilhouetteClientMod.LOGGER.info("silhouette gui renderBackground");
+        if (this.client.world != null) {
+            // original values
+            int colorStart = -1072689136;
+            int colorEnd = -804253680;
+//            int colorStart = -1000;
+//            int colorEnd = -8000;
+            // modified these values so that there's no gray overlay
+            int startX = this.width;
+            int startY = this.height;
+            this.fillGradient(matrices, startX, startY, this.width, this.height, colorStart, colorEnd);
+        } else {
+            this.renderBackgroundTexture(vOffset);
         }
     }
 
@@ -160,12 +181,15 @@ public class SilhouetteOptionsGui extends Screen {
             }
         }
 
-        this.applyButton.setEnabled(hasChanges);
-        this.undoButton.setVisible(hasChanges);
+
+//        this.applyButton.setEnabled(hasChanges);
+//        this.undoButton.setVisible(hasChanges);
         this.closeButton.setEnabled(!hasChanges);
 
         this.hasPendingChanges = hasChanges;
         this.hoveredElement = hovered;
+        // auto apply changes
+        this.applyChanges();
     }
 
     private Stream<OptionUi<?>> getAllOptions() {
