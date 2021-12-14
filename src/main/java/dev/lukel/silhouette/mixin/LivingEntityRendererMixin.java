@@ -1,7 +1,6 @@
 package dev.lukel.silhouette.mixin;
 
-import dev.lukel.silhouette.SilhouetteClientMod;
-import net.minecraft.client.network.OtherClientPlayerEntity;
+import dev.lukel.silhouette.render.SilhouetteLivingEntityRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -16,21 +15,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> {
 
+    private final SilhouetteLivingEntityRenderer impl;
+
     protected LivingEntityRendererMixin(EntityRendererFactory.Context ctx) {
         super(ctx);
+        this.impl = new SilhouetteLivingEntityRenderer((LivingEntityRenderer) (Object) this);
     }
 
     @Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
     protected void hasLabel(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
-        if (livingEntity instanceof OtherClientPlayerEntity) {
-            // only override username display if silhouette is running
-            if (SilhouetteClientMod.options().isEnabled) {
-                cir.setReturnValue(SilhouetteClientMod.options().displayGamertags);
-            }
-        } else {
-            // continue to normal implementation
-//            return super.hasLabel(livingEntity);
+        if (impl.hasLabel(livingEntity)) {
+            cir.setReturnValue(true);
+            cir.cancel();
         }
+        // continue to normal implementation
     }
-
 }

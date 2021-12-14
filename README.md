@@ -13,6 +13,7 @@
 - custom glow (color, intensity, whatever else i can figure out)
 - bright/clearer gamertags 
 - smooth scaling of gamertag size
+- render outline beyond normal player render distance (e.g. on multiplayer server)
 
 ## Setup
 
