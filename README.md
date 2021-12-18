@@ -1,19 +1,20 @@
 # Fabric Example Mod
 
 ## todo 
+   
+[] keybind to quickly enable/disable silhouettes
+[] custom glow (color, intensity, whatever else i can figure out)
+[] bright/clearer gamertags 
+[] smooth scaling of gamertag size
+[] render outline beyond normal player render distance (e.g. on multiplayer server)
 
-- internationalization support for settings ui and stuff 
-- settings
-  - outline self in third person 
-  - minecraft style glow vs apex style 
-  - don't render outline beyond certain distance
-  - only show outline if completely hidden behind cover
-  - always show usernames 
-- keybind to quickly enable/disable silhouettes
-- custom glow (color, intensity, whatever else i can figure out)
-- bright/clearer gamertags 
-- smooth scaling of gamertag size
-- render outline beyond normal player render distance (e.g. on multiplayer server)
+## notes
+
+this is a client-side only mod. however, there is a server-side companion mod that 
+enables you to display player outlines beyond normal render distance. 
+this is helpful because you might want to see a player's outline when you're very far away.
+
+if so
 
 ## Setup
 
@@ -29,7 +30,7 @@ This template is available under the CC0 license. Feel free to learn from it and
 ### attributes
 the settings UI copies Sodium's implementation because it looks pretty cool.
 
-### random ass quote i just want to remember
+### random quote i just want to remember
 Options are selections the user may make to change the behavior of the software.
 
 Settings are options that are preserved between sessions.

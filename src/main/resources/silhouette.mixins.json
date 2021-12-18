@@ -6,11 +6,20 @@
   "mixins": [
   ],
   "client": [
-    "PlayerEntityRendererMixin",
-    "PlayerEntityMixin",
+    "ClientEntityManagerMixin",
+    "ClientEntityManagerMixin$ListenerMixin",
+    "ClientWorldMixin",
     "LivingEntityRendererMixin",
+    "OutlineVertexConsumerProviderMixin",
+    "PlayerEntityMixin",
+    "PlayerEntityRendererMixin",
     "WorldRendererMixin",
-    "OutlineVertexConsumerProviderMixin"
+    "ClientConnectionMixin",
+    "ClientConnectionAccessor",
+    "CustomPayloadC2SPacketAccessor",
+    "CustomPayloadS2CPacketAccessor",
+    "OtherClientPlayerEntityMixin",
+    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

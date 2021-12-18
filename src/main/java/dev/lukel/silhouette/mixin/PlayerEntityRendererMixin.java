@@ -2,6 +2,7 @@ package dev.lukel.silhouette.mixin;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static dev.lukel.silhouette.render.Constants.MINECRAFT_DISPLAY_GAMERTAGS_DISTANCE_LIMIT;
+import static java.lang.Math.sqrt;
 
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
@@ -41,34 +42,42 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
     @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"), cancellable = true)
     protected void renderLabelIfPresent(AbstractClientPlayerEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (SilhouetteClientMod.options().displayGamertags) {
-            double d = dispatcher.getSquaredDistanceToCamera(entity);
-            boolean isWithinRange = d < ((double) MINECRAFT_DISPLAY_GAMERTAGS_DISTANCE_LIMIT);
-            if (isWithinRange) {
+            double distance = dispatcher.getSquaredDistanceToCamera(entity);
+            // nvm just always display my version
+            if (false) {
+//            if (distance < DISPLAY_GAMERTAGS_DISTANCE_LIMIT) {
 //                SilhouetteClientMod.LOGGER.info("silhouette renderLabelIfPresent entity is within normal distance will call normal function");
             } else {
 //                SilhouetteClientMod.LOGGER.info("silhouette renderLabelIfPresent entity is too far away so not gonna render sorry");
 
                 // this code is mostly copy pasted from the normal implementation so be careful modifying it
-
-                boolean bl = !entity.isSneaky();
-                float f = entity.getHeight() + 0.5F;
+//                boolean bl = !entity.isSneaky();
+                float f = entity.getHeight() + 1.0f + ((float)(sqrt(distance * 0.00025f)));
                 int i = "deadmau5".equals(text.getString()) ? -10 : 0;
                 matrices.push();
                 matrices.translate(0.0D, f, 0.0D);
                 matrices.multiply(dispatcher.getRotation());
-                float xScale = -0.2f;
-                float yScale = xScale;
-                float zScale = -xScale;
-                matrices.scale(xScale, yScale, zScale);
-//                    matrices.scale(-0.025F, -0.025F, 0.025F);
+                float xScale = -0.025f;
+                float yScale = -0.025f;
+                float zScale = 0.025f;
+                float fixedSize = 0.125f;
+                boolean shouldDisplayFixedSize = false;
+                float scaleUpSize = (float)sqrt(distance * 0.0000025f);
+                if (shouldDisplayFixedSize) {
+                    matrices.scale(-fixedSize, -fixedSize, fixedSize);
+                } else {
+                    matrices.scale(xScale - scaleUpSize, yScale - scaleUpSize, zScale + scaleUpSize);
+                }
                 Matrix4f matrix4f = matrices.peek().getPositionMatrix();
                 float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
-                int j = (int) (g * 255.0F) << 24;
-                float h = (float) (-getTextRenderer().getWidth(text) / 2);
-                getTextRenderer().draw(text, h, (float) i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
-                if (bl) {
-                    getTextRenderer().draw(text, h, (float) i, -1, false, matrix4f, vertexConsumers, false, 0, light);
-                }
+                int j = (int)(g * 255.0F) << 24;
+                TextRenderer textRenderer = this.getTextRenderer();
+                float h = (float)(-textRenderer.getWidth(text) / 2);
+//                textRenderer.draw(text, h, (float)i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
+                textRenderer.draw(text, h, (float)i, -1, false, matrix4f, vertexConsumers, true, j, light);
+//                if (bl) {
+//                    textRenderer.draw(text, h, (float)i, -1, false, matrix4f, vertexConsumers, false, 0, light);
+//                }
                 matrices.pop();
                 ci.cancel();
             }

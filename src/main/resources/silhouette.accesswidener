@@ -2,3 +2,5 @@ accessWidener v1 named
 
 accessible field net/minecraft/client/option/CyclingOption setter Lnet/minecraft/client/option/CyclingOption$Setter;
 accessible field net/minecraft/client/option/CyclingOption getter Ljava/util/function/Function;
+
+accessible class net/minecraft/client/world/ClientEntityManager$Listener;

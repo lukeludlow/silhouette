@@ -1,20 +1,27 @@
 package dev.lukel.silhouette.mixin;
 
 import com.google.gson.JsonSyntaxException;
-import dev.lukel.silhouette.render.PixelRaycast;
 import dev.lukel.silhouette.SilhouetteClientMod;
 import dev.lukel.silhouette.options.SilhouetteVisualStyle;
+import dev.lukel.silhouette.render.PixelRaycast;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.SynchronousResourceReloader;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +30,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
+import java.util.stream.StreamSupport;
+
+import static dev.lukel.silhouette.render.Constants.HIDE_RGBA;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements SynchronousResourceReloader {
@@ -44,7 +54,19 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     public void loadEntityOutlineShader() {
     }
 
-    //    @Inject(method = "close", at = @At("RETURN"))
+    // TODO FIXME remove this stuff just testing
+    @Shadow
+    private ClientWorld world;
+    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V", at = @At("RETURN"))
+    public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+        boolean otherClientPlayerEntityExists = StreamSupport.stream(this.world.getEntities().spliterator(), false).anyMatch(x -> x instanceof OtherClientPlayerEntity);
+        if (otherClientPlayerEntityExists) {
+//            SilhouetteClientMod.LOGGER.info("other client player entity exists");
+        }
+    }
+
+
+        //    @Inject(method = "close", at = @At("RETURN"))
 //    public void silhouette_close(CallbackInfo ci) {
 //        closeSilhouetteShader();
 //    }
@@ -54,6 +76,8 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
 //            silhouetteShader.close();
 //        }
 //    }
+
+    @Shadow @Final private EntityRenderDispatcher entityRenderDispatcher;
 
     // FIXME delete this i just testing stuff trying to inject my own shader
     @Inject(method = "loadEntityOutlineShader", at = @At("HEAD"), cancellable = true)
@@ -146,6 +170,11 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     private void renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta,
                               MatrixStack matrices, VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
 
+//        if (entity instanceof OtherClientPlayerEntity) {
+//            double distance = entityRenderDispatcher.getSquaredDistanceToCamera(entity);
+//            SilhouetteClientMod.LOGGER.info(String.format("renderEntity OtherClientPlayerEntity distance=%f", distance));
+//        }
+
         if (shouldRenderEntityOutline(entity, vertexConsumers)) {
 
             if (SilhouetteClientMod.options().outlineOnlyWhenFullyHidden) {
@@ -158,7 +187,7 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
 
 //                    matrices.push();
 //                    matrices.scale(0, 0, 0);
-                    outlineVertexConsumers.setColor(69, 69, 69, 69);
+                    outlineVertexConsumers.setColor(HIDE_RGBA, HIDE_RGBA, HIDE_RGBA, HIDE_RGBA);
 //                    matrices.pop();
 
                 } else {
