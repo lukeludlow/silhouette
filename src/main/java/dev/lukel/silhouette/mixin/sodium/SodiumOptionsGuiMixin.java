@@ -1,7 +1,7 @@
 package dev.lukel.silhouette.mixin.sodium;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
-import dev.lukel.silhouette.options.sodiumcompat.SilhouetteGameOptionPages;
+import dev.lukel.silhouette.options.SilhouetteGameOptionPages;
 import me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
 import net.minecraft.client.gui.screen.Screen;

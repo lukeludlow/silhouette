@@ -1,4 +1,4 @@
-package dev.lukel.silhouette.options.ui;
+package dev.lukel.silhouette.options;
 
 import java.util.Map;
 

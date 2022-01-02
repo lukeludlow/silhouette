@@ -1,6 +1,6 @@
 package dev.lukel.silhouette;
 
-import dev.lukel.silhouette.options.sodiumcompat.SilhouetteGameOptions;
+import dev.lukel.silhouette.options.SilhouetteGameOptions;
 import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package dev.lukel.silhouette.mixin;
+package dev.lukel.silhouette.mixin.debug;
 
 import dev.lukel.silhouette.PacketLogger;
 import io.netty.util.concurrent.GenericFutureListener;

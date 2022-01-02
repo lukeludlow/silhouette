@@ -1,4 +1,4 @@
-package dev.lukel.silhouette.mixin;
+package dev.lukel.silhouette.mixin.debug;
 
 import net.minecraft.client.world.ClientEntityManager;
 import net.minecraft.entity.Entity;

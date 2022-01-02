@@ -1,6 +1,6 @@
 package dev.lukel.silhouette.options;
 
-import dev.lukel.silhouette.options.ui.options.TextProvider;
+import me.jellysquid.mods.sodium.client.gui.options.TextProvider;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 

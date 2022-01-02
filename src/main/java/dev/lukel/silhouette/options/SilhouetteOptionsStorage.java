@@ -1,4 +1,4 @@
-package dev.lukel.silhouette.options.sodiumcompat;
+package dev.lukel.silhouette.options;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
 import me.jellysquid.mods.sodium.client.gui.options.storage.OptionStorage;

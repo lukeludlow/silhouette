@@ -1,9 +1,8 @@
-package dev.lukel.silhouette.options.sodiumcompat;
+package dev.lukel.silhouette.options;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.lukel.silhouette.options.SilhouetteVisualStyle;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.FileReader;

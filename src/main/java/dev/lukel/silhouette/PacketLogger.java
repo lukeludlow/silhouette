@@ -1,6 +1,6 @@
 package dev.lukel.silhouette;
 
-import dev.lukel.silhouette.mixin.CustomPayloadS2CPacketAccessor;
+import dev.lukel.silhouette.mixin.debug.CustomPayloadS2CPacketAccessor;
 import net.fabricmc.fabric.mixin.networking.accessor.CustomPayloadC2SPacketAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
@@ -8,9 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerSpawnS2CPacket;
 import net.minecraft.util.Identifier;

@@ -1,4 +1,4 @@
-package dev.lukel.silhouette.mixin;
+package dev.lukel.silhouette.mixin.debug;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

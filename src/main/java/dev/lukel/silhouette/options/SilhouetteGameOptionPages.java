@@ -1,9 +1,7 @@
-package dev.lukel.silhouette.options.sodiumcompat;
+package dev.lukel.silhouette.options;
 
 import com.google.common.collect.ImmutableList;
 import dev.lukel.silhouette.SilhouetteClientMod;
-import dev.lukel.silhouette.options.SilhouetteVisualStyle;
-import dev.lukel.silhouette.options.ui.OptionsTranslatableTextMap;
 import me.jellysquid.mods.sodium.client.gui.options.OptionGroup;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpact;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpl;
