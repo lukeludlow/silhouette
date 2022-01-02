@@ -18,7 +18,6 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
-import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -271,11 +270,6 @@ public class SilhouetteOptionsGui extends Screen {
     private void undoChanges() {
         this.getAllOptions()
                 .forEach(OptionUi::reset);
-    }
-
-    private void openDonationPage() {
-        Util.getOperatingSystem()
-                .open("https://caffeinemc.net/donate");
     }
 
     @Override

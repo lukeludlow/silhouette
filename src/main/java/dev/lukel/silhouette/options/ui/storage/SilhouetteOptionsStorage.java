@@ -9,7 +9,7 @@ public class SilhouetteOptionsStorage implements OptionStorage<SilhouetteOptions
     private final SilhouetteOptions options;
 
     public SilhouetteOptionsStorage() {
-        this.options = SilhouetteClientMod.options();
+        this.options = null;
     }
 
     @Override

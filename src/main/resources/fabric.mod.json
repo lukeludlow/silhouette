@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "silhouette mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "display friendly player outlines through walls",
   "authors": [
     "lukeludlow"
   ],
@@ -20,9 +20,6 @@
   "entrypoints": {
     "client": [
       "dev.lukel.silhouette.SilhouetteClientMod"
-    ],
-    "modmenu": [
-      "dev.lukel.silhouette.options.ui.SilhouetteModMenu"
     ]
   },
   "mixins": [

@@ -41,7 +41,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
 
     @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"), cancellable = true)
     protected void renderLabelIfPresent(AbstractClientPlayerEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (SilhouetteClientMod.options().displayGamertags) {
+        if (SilhouetteClientMod.options().silhouette.displayGamertags) {
             double distance = dispatcher.getSquaredDistanceToCamera(entity);
             // nvm just always display my version
             if (false) {

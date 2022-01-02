@@ -3,23 +3,22 @@
   "minVersion": "0.8",
   "package": "dev.lukel.silhouette.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-  ],
   "client": [
+    "ClientConnectionAccessor",
+    "ClientConnectionMixin",
     "ClientEntityManagerMixin",
     "ClientEntityManagerMixin$ListenerMixin",
+    "ClientPlayNetworkHandlerMixin",
     "ClientWorldMixin",
+    "CustomPayloadC2SPacketAccessor",
+    "CustomPayloadS2CPacketAccessor",
     "LivingEntityRendererMixin",
+    "OtherClientPlayerEntityMixin",
     "OutlineVertexConsumerProviderMixin",
     "PlayerEntityMixin",
     "PlayerEntityRendererMixin",
     "WorldRendererMixin",
-    "ClientConnectionMixin",
-    "ClientConnectionAccessor",
-    "CustomPayloadC2SPacketAccessor",
-    "CustomPayloadS2CPacketAccessor",
-    "OtherClientPlayerEntityMixin",
-    "ClientPlayNetworkHandlerMixin"
+    "sodium.SodiumOptionsGuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

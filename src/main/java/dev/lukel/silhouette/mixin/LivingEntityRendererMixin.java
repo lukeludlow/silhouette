@@ -23,7 +23,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     protected void hasLabel(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
         if (livingEntity instanceof OtherClientPlayerEntity) {
             // only override username display if silhouette is running
-            if (SilhouetteClientMod.options().isEnabled && SilhouetteClientMod.options().displayGamertags) {
+            if (SilhouetteClientMod.options().silhouette.isEnabled && SilhouetteClientMod.options().silhouette.displayGamertags) {
                 cir.setReturnValue(true);
                 cir.cancel();
             }

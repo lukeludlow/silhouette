@@ -54,16 +54,16 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     public void loadEntityOutlineShader() {
     }
 
-    // TODO FIXME remove this stuff just testing
-    @Shadow
-    private ClientWorld world;
-    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V", at = @At("RETURN"))
-    public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        boolean otherClientPlayerEntityExists = StreamSupport.stream(this.world.getEntities().spliterator(), false).anyMatch(x -> x instanceof OtherClientPlayerEntity);
-        if (otherClientPlayerEntityExists) {
-//            SilhouetteClientMod.LOGGER.info("other client player entity exists");
-        }
-    }
+//    // TODO FIXME remove this stuff just testing
+//    @Shadow
+//    private ClientWorld world;
+//    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V", at = @At("RETURN"))
+//    public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
+//        boolean otherClientPlayerEntityExists = StreamSupport.stream(this.world.getEntities().spliterator(), false).anyMatch(x -> x instanceof OtherClientPlayerEntity);
+//        if (otherClientPlayerEntityExists) {
+////            SilhouetteClientMod.LOGGER.info("other client player entity exists");
+//        }
+//    }
 
 
         //    @Inject(method = "close", at = @At("RETURN"))
@@ -85,7 +85,7 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
 
         SilhouetteClientMod.LOGGER.info("here!!! loadEntityOutlineShader");
 
-        if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.APEX) {
+        if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.APEX) {
             SilhouetteClientMod.LOGGER.info("silhouette loading apex outline shader");
             loadSilhouetteShader();
             ci.cancel();  // cancel so the regular implementation isn't called
@@ -177,67 +177,23 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
 
         if (shouldRenderEntityOutline(entity, vertexConsumers)) {
 
-            if (SilhouetteClientMod.options().outlineOnlyWhenFullyHidden) {
-                boolean anyPixelShowsPlayer = PixelRaycast.pixelRaycastHitsOtherPlayer(matrices, tickDelta);
-                if (anyPixelShowsPlayer) {
-                    // make outline "invisible"
-                    OutlineVertexConsumerProvider outlineVertexConsumers = (OutlineVertexConsumerProvider) vertexConsumers;
 
-//                    ((OutlineVertexConsumerProviderMixin) outlineVertexConsumers).setShouldDraw(false);
-
-//                    matrices.push();
-//                    matrices.scale(0, 0, 0);
-                    outlineVertexConsumers.setColor(HIDE_RGBA, HIDE_RGBA, HIDE_RGBA, HIDE_RGBA);
-//                    matrices.pop();
-
-                } else {
-                    // normal stuff
-
-                    OutlineVertexConsumerProvider outlineVertexConsumers = (OutlineVertexConsumerProvider) vertexConsumers;
-
-                    if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.MINECRAFT) {
-                        final int red = 255;
-                        final int green = 255;
-                        final int blue = 255;
-                        final int alpha = 255;
-                        outlineVertexConsumers.setColor(red, green, blue, alpha);
-                    } else if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.APEX) {
-                        final int red = 155;
-                        final int green = 215;
-                        final int blue = 255;
-                        int alpha = 255;
-                        outlineVertexConsumers.setColor(red, green, blue, alpha);
-                    }
-
-                }
-            } else {
                 OutlineVertexConsumerProvider outlineVertexConsumers = (OutlineVertexConsumerProvider) vertexConsumers;
 
-                if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.MINECRAFT) {
+                if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.MINECRAFT) {
                     final int red = 255;
                     final int green = 255;
                     final int blue = 255;
                     final int alpha = 255;
                     outlineVertexConsumers.setColor(red, green, blue, alpha);
-                } else if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.APEX) {
+                } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.APEX) {
                     final int red = 155;
                     final int green = 215;
                     final int blue = 255;
                     int alpha = 255;
                     outlineVertexConsumers.setColor(red, green, blue, alpha);
                 }
-            }
 
-
-
-
-//                // TODO render within range
-//                if (entity instanceof OtherClientPlayerEntity otherPlayer) {
-//                    if (client.player != null) {
-////                        final float distanceToOtherPlayer = client.player.distanceTo(playerEntity);
-////                    client.world.
-//                    }
-//                }
         }
 
     }
@@ -245,7 +201,7 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     private boolean shouldRenderEntityOutline(Entity entity, VertexConsumerProvider vertexConsumers) {
         boolean isPlayerEntity = entity instanceof PlayerEntity;
         boolean isOutlineVertexConsumers = vertexConsumers instanceof OutlineVertexConsumerProvider;
-        boolean isModEnabled = SilhouetteClientMod.options().isEnabled;
+        boolean isModEnabled = SilhouetteClientMod.options().silhouette.isEnabled;
         boolean shouldRender = isPlayerEntity && isOutlineVertexConsumers && isModEnabled;
         return shouldRender;
     }

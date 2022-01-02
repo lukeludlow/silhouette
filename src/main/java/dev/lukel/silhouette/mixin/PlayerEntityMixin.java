@@ -16,11 +16,11 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Override
     public boolean isGlowing() {
-        return SilhouetteClientMod.options().isEnabled;
+        return SilhouetteClientMod.options().silhouette.isEnabled;
     }
 
     @Override
     public boolean shouldRenderName() {
-        return SilhouetteClientMod.options().displayGamertags;
+        return SilhouetteClientMod.options().silhouette.displayGamertags;
     }
 }

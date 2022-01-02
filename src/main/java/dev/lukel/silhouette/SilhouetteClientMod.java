@@ -1,61 +1,50 @@
 package dev.lukel.silhouette;
 
-import dev.lukel.silhouette.options.SilhouetteOptions;
-import dev.lukel.silhouette.options.ui.storage.OptionsFileSave;
+import dev.lukel.silhouette.options.sodiumcompat.SilhouetteGameOptions;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
-import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
-import net.minecraft.client.network.OtherClientPlayerEntity;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SilhouetteClientMod implements ClientModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger("silhouette");
-    private static SilhouetteOptions CONFIG;
+    private static SilhouetteGameOptions CONFIG;
 
     public SilhouetteClientMod() {
-        this(new SilhouetteOptions());
+        this(new SilhouetteGameOptions());
     }
 
     // used for DI in unit tests
-    public SilhouetteClientMod(SilhouetteOptions config) {
+    public SilhouetteClientMod(SilhouetteGameOptions config) {
         CONFIG = config;
     }
 
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Hello Fabric world!");
-        CONFIG = OptionsFileSave.load();
-
-        EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> {
-            LOGGER.info("start tracking");
-        });
-
-        EntityTrackingEvents.STOP_TRACKING.register((trackedEntity, player) -> {
-            LOGGER.info("stop tracking other player entity");
-            if (trackedEntity instanceof OtherClientPlayerEntity) {
-                LOGGER.info("stop tracking other player entity");
-            }
-        });
-
-
-//        ClientPlayNetworking.registerGlobalReceiver()
-
-        RegistryEntryAddedCallback.event(Registry.ENTITY_TYPE).register((((rawId, id, object) -> {
-
-        })));
-
-
+        LOGGER.info("initializing silhouette mod");
+        LOGGER.error("sample error");
+        CONFIG = loadConfig();
     }
 
-    // gonna let this stay static even though it's annoying
-    public static SilhouetteOptions options() {
+    public static SilhouetteGameOptions options() {
         if (CONFIG == null) {
             throw new IllegalStateException("Config not yet available");
         }
         return CONFIG;
+    }
+
+    private static SilhouetteGameOptions loadConfig() {
+        try {
+            return SilhouetteGameOptions.load();
+        } catch (Exception e) {
+            LOGGER.error("Failed to load configuration file", e);
+            LOGGER.error("Using default configuration file in read-only mode");
+
+            var config = new SilhouetteGameOptions();
+            config.setReadOnly();
+
+            return config;
+        }
     }
 
 
