@@ -6,7 +6,8 @@ import net.minecraft.text.TranslatableText;
 
 public enum SilhouetteVisualStyle implements TextProvider {
     MINECRAFT("silhouette.options.visual_style.minecraft"),
-    APEX("silhouette.options.visual_style.apex");
+    APEX("silhouette.options.visual_style.apex"),
+    CUSTOM("silhouette.options.visual_style.custom");
 
     private final Text name;
 

@@ -2,13 +2,18 @@ package dev.lukel.silhouette;
 
 import dev.lukel.silhouette.options.SilhouetteGameOptions;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ShaderEffectManager;
 
 public class SilhouetteClientMod implements ClientModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger("silhouette");
     private static SilhouetteGameOptions CONFIG;
+
+    private static final ManagedShaderEffect SILHOUETTE_SHADER = ShaderEffectManager.getInstance().manage(new Identifier("minecraft", "shaders/post/entity_outline.json"));
 
     public SilhouetteClientMod() {
         this(new SilhouetteGameOptions());
@@ -24,6 +29,13 @@ public class SilhouetteClientMod implements ClientModInitializer {
         LOGGER.info("initializing silhouette mod");
         LOGGER.error("sample error");
         CONFIG = loadConfig();
+
+
+//        ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
+//            if (CONFIG.silhouette.isEnabled) {
+//            }
+//        });
+
     }
 
     public static SilhouetteGameOptions options() {

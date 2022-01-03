@@ -16,6 +16,7 @@ public class SilhouetteGameOptions {
     private static final String DEFAULT_FILE_NAME = "silhouette-options.json";
 
     public final SilhouetteSettings silhouette = new SilhouetteSettings();
+    public final CustomStyle customStyle = new CustomStyle();
 
     private boolean readOnly;
     private Path configPath;
@@ -24,6 +25,13 @@ public class SilhouetteGameOptions {
         public boolean isEnabled = true;
         public SilhouetteVisualStyle style = SilhouetteVisualStyle.APEX;
         public boolean displayGamertags = true;
+    }
+
+    public static class CustomStyle {
+        public int red = 255;
+        public int green = 255;
+        public int blue = 255;
+        public int alpha = 255;
     }
 
     private static final Gson GSON = new GsonBuilder()

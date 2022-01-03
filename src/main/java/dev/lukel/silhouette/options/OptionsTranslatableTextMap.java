@@ -12,6 +12,10 @@ public class OptionsTranslatableTextMap {
     public static final String renderDistanceMin = "silhouette.options.render_distance_min";
     public static final String renderDistanceMax = "silhouette.options.render_distance_max";
     public static final String outlineOnlyWhenFullyHidden = "silhouette.options.should_outline_only_when_fully_hidden";
+    public static final String red = "silhouette.options.red";
+    public static final String green = "silhouette.options.green";
+    public static final String blue = "silhouette.options.blue";
+    public static final String alpha = "silhouette.options.alpha";
 
     public static final Map<String, String> map = Map.ofEntries(
             entry("isEnabled", isEnabled),

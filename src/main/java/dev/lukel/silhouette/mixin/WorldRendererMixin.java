@@ -37,10 +37,6 @@ import static dev.lukel.silhouette.render.Constants.HIDE_RGBA;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements SynchronousResourceReloader {
 
-
-//    private ShaderEffect silhouetteShader;
-//    private Framebuffer silhouetteFrameBuffer;
-
     @Final
     @Shadow
     private MinecraftClient client;
@@ -54,68 +50,35 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     public void loadEntityOutlineShader() {
     }
 
-//    // TODO FIXME remove this stuff just testing
-//    @Shadow
-//    private ClientWorld world;
-//    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;FJZLnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/GameRenderer;Lnet/minecraft/client/render/LightmapTextureManager;Lnet/minecraft/util/math/Matrix4f;)V", at = @At("RETURN"))
-//    public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-//        boolean otherClientPlayerEntityExists = StreamSupport.stream(this.world.getEntities().spliterator(), false).anyMatch(x -> x instanceof OtherClientPlayerEntity);
-//        if (otherClientPlayerEntityExists) {
-////            SilhouetteClientMod.LOGGER.info("other client player entity exists");
-//        }
-//    }
-
-
-        //    @Inject(method = "close", at = @At("RETURN"))
-//    public void silhouette_close(CallbackInfo ci) {
-//        closeSilhouetteShader();
-//    }
-
-//    private void closeSilhouetteShader() {
-//        if (silhouetteShader != null) {
-//            silhouetteShader.close();
-//        }
-//    }
-
     @Shadow @Final private EntityRenderDispatcher entityRenderDispatcher;
 
-    // FIXME delete this i just testing stuff trying to inject my own shader
     @Inject(method = "loadEntityOutlineShader", at = @At("HEAD"), cancellable = true)
     public void silhouette_loadEntityOutlineShader(CallbackInfo ci) {
-
         SilhouetteClientMod.LOGGER.info("here!!! loadEntityOutlineShader");
-
         if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.APEX) {
             SilhouetteClientMod.LOGGER.info("silhouette loading apex outline shader");
-            loadSilhouetteShader();
+            loadSilhouetteShader("entity_outline_apex");
             ci.cancel();  // cancel so the regular implementation isn't called
-        } else {
+        } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.CUSTOM) {
+            SilhouetteClientMod.LOGGER.info("silhouette loading custom outline shader");
+            loadSilhouetteShader("entity_outline_custom");
+            ci.cancel();  // cancel so the regular implementation isn't called
+        } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.MINECRAFT){
             SilhouetteClientMod.LOGGER.info("silhouette loading normal outline shader");
             // continue the function like normal
         }
-
     }
 
-    private void loadSilhouetteShader() {
+    private void loadSilhouetteShader(String shaderFileName) {
         if (this.entityOutlineShader != null) {
             this.entityOutlineShader.close();
         }
 
-//        Identifier identifier = null;
-//        if (SilhouetteClientMod.options().style == SilhouetteVisualStyle.APEX) {
-//            // get my version of entity outline shader
-//            identifier = new Identifier("silhouette", "shaders/post/entity_outline.json");
-//            SilhouetteClientMod.LOGGER.info("silhouette loading apex outline shader");
-//        } else {
-//            // normal version
-//            identifier = new Identifier("shaders/post/entity_outline.json");
-//            SilhouetteClientMod.LOGGER.info("silhouette loading normal outline shader");
-//        }
-
-        Identifier identifier = new Identifier("silhouette", "shaders/post/entity_outline.json");
+        Identifier identifier = new Identifier("silhouette", "shaders/post/" + shaderFileName + ".json");
 
         try {
             this.entityOutlineShader = new ShaderEffect(this.client.getTextureManager(), this.client.getResourceManager(), this.client.getFramebuffer(), identifier);
+
             this.entityOutlineShader.setupDimensions(this.client.getWindow().getFramebufferWidth(), this.client.getWindow().getFramebufferHeight());
             this.entityOutlinesFramebuffer = this.entityOutlineShader.getSecondaryTarget("final");
         } catch (IOException var3) {
@@ -136,50 +99,12 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
         this.loadEntityOutlineShader();
     }
 
-//
-//    private void loadSilhouetteShader() {
-//        if (silhouetteShader != null) {
-//            silhouetteShader.close();
-//        }
-//
-//        Identifier identifier = new Identifier("shaders/post/entity_outline.json");
-//
-//        try {
-//            silhouetteShader = new ShaderEffect(client.getTextureManager(), client.getResourceManager(), client.getFramebuffer(), identifier);
-//            silhouetteShader.setupDimensions(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight());
-//            silhouetteFrameBuffer = this.silhouetteShader.getSecondaryTarget("final");
-//        } catch (IOException ex) {
-//            SilhouetteClientMod.LOGGER.warn(String.format("failed to load shader %s: %s", identifier, ex));
-//            silhouetteShader = null;
-//            silhouetteFrameBuffer = null;
-//        } catch (JsonSyntaxException ex) {
-//            SilhouetteClientMod.LOGGER.warn(String.format("failed to parse shader %s: %s", identifier, ex));
-//            silhouetteShader = null;
-//            silhouetteFrameBuffer = null;
-//        }
-//    }
-
-//    @Inject(method = "onResized", at = @At("RETURN"))
-//    public void onResized(int width, int height, CallbackInfo ci) {
-//        if (silhouetteShader != null) {
-//            silhouetteShader.setupDimensions(width, height);
-//        }
-//    }
-
     @Inject(method = "renderEntity", at = @At("HEAD"))
     private void renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta,
                               MatrixStack matrices, VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
 
-//        if (entity instanceof OtherClientPlayerEntity) {
-//            double distance = entityRenderDispatcher.getSquaredDistanceToCamera(entity);
-//            SilhouetteClientMod.LOGGER.info(String.format("renderEntity OtherClientPlayerEntity distance=%f", distance));
-//        }
-
         if (shouldRenderEntityOutline(entity, vertexConsumers)) {
-
-
                 OutlineVertexConsumerProvider outlineVertexConsumers = (OutlineVertexConsumerProvider) vertexConsumers;
-
                 if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.MINECRAFT) {
                     final int red = 255;
                     final int green = 255;
@@ -190,10 +115,15 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
                     final int red = 155;
                     final int green = 215;
                     final int blue = 255;
-                    int alpha = 255;
+                    final int alpha = 255;
+                    outlineVertexConsumers.setColor(red, green, blue, alpha);
+                } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.CUSTOM) {
+                    final int red = SilhouetteClientMod.options().customStyle.red;
+                    final int green = SilhouetteClientMod.options().customStyle.green;
+                    final int blue = SilhouetteClientMod.options().customStyle.blue;
+                    final int alpha = SilhouetteClientMod.options().customStyle.alpha;
                     outlineVertexConsumers.setColor(red, green, blue, alpha);
                 }
-
         }
 
     }
@@ -202,9 +132,7 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
         boolean isPlayerEntity = entity instanceof PlayerEntity;
         boolean isOutlineVertexConsumers = vertexConsumers instanceof OutlineVertexConsumerProvider;
         boolean isModEnabled = SilhouetteClientMod.options().silhouette.isEnabled;
-        boolean shouldRender = isPlayerEntity && isOutlineVertexConsumers && isModEnabled;
-        return shouldRender;
+        return isPlayerEntity && isOutlineVertexConsumers && isModEnabled;
     }
-
 
 }
