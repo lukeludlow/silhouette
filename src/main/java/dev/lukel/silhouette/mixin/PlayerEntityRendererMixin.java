@@ -1,6 +1,7 @@
 package dev.lukel.silhouette.mixin;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
+import dev.lukel.silhouette.options.SilhouetteVisualStyle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -26,61 +27,43 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         super(ctx, model, shadowRadius);
     }
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    public void silhouette_PlayerEntityRendererMixin(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
-//        super(ctx, new PlayerEntityModel(ctx.getPart(slim ? EntityModelLayers.PLAYER_SLIM : EntityModelLayers.PLAYER), slim), 0.5F);
-        // FIXME maybe add this feature back idk if i want it
-//        this.addFeature(new PlayerSilhouetteFeatureRenderer<>(this, ctx.getModelLoader()));
-    }
-
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
-    public void silhouette_render(AbstractClientPlayerEntity entity, float f, float g, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-//        SilhouetteMod.LOGGER.info("mixin postRender!!!");
-    }
-
-
     @Inject(method = "renderLabelIfPresent(Lnet/minecraft/client/network/AbstractClientPlayerEntity;Lnet/minecraft/text/Text;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"), cancellable = true)
     protected void renderLabelIfPresent(AbstractClientPlayerEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (SilhouetteClientMod.options().silhouette.displayGamertags) {
             double distance = dispatcher.getSquaredDistanceToCamera(entity);
-            // nvm just always display my version
-            if (false) {
-//            if (distance < DISPLAY_GAMERTAGS_DISTANCE_LIMIT) {
-//                SilhouetteClientMod.LOGGER.info("silhouette renderLabelIfPresent entity is within normal distance will call normal function");
-            } else {
-//                SilhouetteClientMod.LOGGER.info("silhouette renderLabelIfPresent entity is too far away so not gonna render sorry");
-
-                // this code is mostly copy pasted from the normal implementation so be careful modifying it
-//                boolean bl = !entity.isSneaky();
-                float f = entity.getHeight() + 1.0f + ((float)(sqrt(distance * 0.00025f)));
-                int i = "deadmau5".equals(text.getString()) ? -10 : 0;
-                matrices.push();
-                matrices.translate(0.0D, f, 0.0D);
-                matrices.multiply(dispatcher.getRotation());
-                float xScale = -0.025f;
-                float yScale = -0.025f;
-                float zScale = 0.025f;
-                float fixedSize = 0.125f;
-                boolean shouldDisplayFixedSize = false;
-                float scaleUpSize = (float)sqrt(distance * 0.0000025f);
-                if (shouldDisplayFixedSize) {
-                    matrices.scale(-fixedSize, -fixedSize, fixedSize);
-                } else {
-                    matrices.scale(xScale - scaleUpSize, yScale - scaleUpSize, zScale + scaleUpSize);
-                }
-                Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-                float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
-                int j = (int)(g * 255.0F) << 24;
-                TextRenderer textRenderer = this.getTextRenderer();
-                float h = (float)(-textRenderer.getWidth(text) / 2);
-//                textRenderer.draw(text, h, (float)i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
-                textRenderer.draw(text, h, (float)i, -1, false, matrix4f, vertexConsumers, true, j, light);
-//                if (bl) {
-//                    textRenderer.draw(text, h, (float)i, -1, false, matrix4f, vertexConsumers, false, 0, light);
-//                }
-                matrices.pop();
-                ci.cancel();
+            // this code is mostly copy pasted from the normal implementation so be careful modifying it
+            float f = entity.getHeight() + 1.0f + ((float)(sqrt(distance * 0.00025f)));
+            int i = "deadmau5".equals(text.getString()) ? -10 : 0;
+            matrices.push();
+            matrices.translate(0.0D, f, 0.0D);
+            matrices.multiply(dispatcher.getRotation());
+            float xScale = -0.025f;
+            float yScale = -0.025f;
+            float zScale = 0.025f;
+            float scaleUpFactor = 0.0000025f;  // default is 0.0000025f because i think it looks good
+            if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.CUSTOM) {
+                int gamertagSizeModifier = SilhouetteClientMod.options().customStyle.gamertagSize;
+                scaleUpFactor = calculateGamertagScaleUpSize(gamertagSizeModifier);
             }
+            float scaleUpSize = (float)sqrt(distance * scaleUpFactor);
+            matrices.scale(xScale - scaleUpSize, yScale - scaleUpSize, zScale + scaleUpSize);
+            Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+            float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
+            int j = (int)(g * 255.0F) << 24;
+            TextRenderer textRenderer = this.getTextRenderer();
+            float h = (float)(-textRenderer.getWidth(text) / 2);
+//                textRenderer.draw(text, h, (float)i, 553648127, false, matrix4f, vertexConsumers, bl, j, light);
+            textRenderer.draw(text, h, (float)i, -1, false, matrix4f, vertexConsumers, true, j, light);
+            matrices.pop();
+            ci.cancel();
         }
+        // otherwise, if my gamertags are disabled then continue to the normal function
     }
+
+    private float calculateGamertagScaleUpSize(int gamertagSizeModifier) {
+        // this is just a custom formula that i decided looks good
+        float minimumScaleUpSize = 0.0000001f;  // calculated by 0.0000025f / (5 * 5)  because 5 is the default
+        return minimumScaleUpSize * (gamertagSizeModifier * gamertagSizeModifier);
+    }
+
 }

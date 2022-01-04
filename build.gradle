@@ -43,10 +43,13 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// include sodium so we can mixin to the options pages
-	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
+//	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
+	modImplementation files("jars/sodium-fabric-mc1.18-0.4.0-alpha5+build.9.jar")
+	modImplementation files("jars/satin-1.7.1.jar")
+//	"com.github.CaffeineMC:sodium-fabric:1af1d76"
 	implementation "org.joml:joml:1.10.2"
 
-	modImplementation "io.github.ladysnake:satin:${project.satin_version}"
+//	modImplementation "io.github.ladysnake:satin:${project.satin_version}"
 	// Include Satin as a Jar-in-Jar dependency (optional) (but yeah i want this)
 //	include "io.github.ladysnake:satin:${satin_version}"
 

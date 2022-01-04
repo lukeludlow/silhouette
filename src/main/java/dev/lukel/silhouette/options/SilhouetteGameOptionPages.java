@@ -6,6 +6,7 @@ import me.jellysquid.mods.sodium.client.gui.options.OptionGroup;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpact;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpl;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
+import me.jellysquid.mods.sodium.client.gui.options.control.ControlElement;
 import me.jellysquid.mods.sodium.client.gui.options.control.ControlValueFormatter;
 import me.jellysquid.mods.sodium.client.gui.options.control.CyclingControl;
 import me.jellysquid.mods.sodium.client.gui.options.control.SliderControl;
@@ -26,6 +27,7 @@ public class SilhouetteGameOptionPages {
         SilhouetteClientMod.LOGGER.info("SilhouetteGameOptionPages silhouette()");
         List<OptionGroup> groups = new ArrayList<>();
 
+        // main group
         groups.add(OptionGroup.createBuilder()
                 .add(OptionImpl.createBuilder(boolean.class, silhouetteOptions)
                         .setName(new TranslatableText(OptionsTranslatableTextMap.isEnabled + ".name"))
@@ -38,8 +40,8 @@ public class SilhouetteGameOptionPages {
                         .setName(new TranslatableText(OptionsTranslatableTextMap.style + ".name"))
                         .setTooltip(new TranslatableText(OptionsTranslatableTextMap.style + ".tooltip"))
                         .setControl(option -> new CyclingControl<>(option, SilhouetteVisualStyle.class))
-                        .setImpact(OptionImpact.LOW)
                         .setBinding((opts, value) -> opts.silhouette.style = value, opts -> opts.silhouette.style)
+                        .setImpact(OptionImpact.LOW)
                         .setFlags(REQUIRES_RENDERER_RELOAD)
                         .build())
                 .add(OptionImpl.createBuilder(boolean.class, silhouetteOptions)
@@ -51,7 +53,15 @@ public class SilhouetteGameOptionPages {
                         .build())
                 .build());
 
+        // group for custom style controls
         groups.add(OptionGroup.createBuilder()
+                .add(OptionImpl.createBuilder(SilhouetteDummyEnum.class, silhouetteOptions)
+                        .setName(new TranslatableText(OptionsTranslatableTextMap.customStyleGroup + ".name"))
+                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.customStyleGroup + ".tooltip"))
+                        .setControl(option -> new CyclingControl<>(option, SilhouetteDummyEnum.class))
+                        .setBinding((opts, value) -> opts.customStyle.customStyleGroupTitle = value, opts -> opts.customStyle.customStyleGroupTitle)
+                        .setImpact(OptionImpact.LOW)
+                        .build())
                 .add(OptionImpl.createBuilder(int.class, silhouetteOptions)
                         .setName(new TranslatableText(OptionsTranslatableTextMap.red + ".name"))
                         .setTooltip(new TranslatableText(OptionsTranslatableTextMap.red + ".tooltip"))
@@ -74,14 +84,31 @@ public class SilhouetteGameOptionPages {
                         .setImpact(OptionImpact.LOW)
                         .build())
                 .add(OptionImpl.createBuilder(int.class, silhouetteOptions)
-                        .setName(new TranslatableText(OptionsTranslatableTextMap.alpha + ".name"))
-                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.alpha + ".tooltip"))
-                        .setControl(option -> new SliderControl(option, 0, 255, 1, ControlValueFormatter.number()))
-                        .setBinding((opts, value) -> opts.customStyle.alpha = value, opts -> opts.customStyle.alpha)
+                        .setName(new TranslatableText(OptionsTranslatableTextMap.luminosity + ".name"))
+                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.luminosity + ".tooltip"))
+                        .setControl(option -> new SliderControl(option, 0, 10, 1, ControlValueFormatter.number()))
+                        .setBinding((opts, value) -> opts.customStyle.luminosity = value, opts -> opts.customStyle.luminosity)
+                        .setImpact(OptionImpact.LOW)
+                        .setFlags(REQUIRES_RENDERER_RELOAD)
+                        .build())
+                .add(OptionImpl.createBuilder(boolean.class, silhouetteOptions)
+                        .setName(new TranslatableText(OptionsTranslatableTextMap.blurDir+ ".name"))
+                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.blurDir+ ".tooltip"))
+                        .setControl(TickBoxControl::new)
+                        .setBinding((opts, value) -> opts.customStyle.blur = value, opts -> opts.customStyle.blur)
+                        .setImpact(OptionImpact.LOW)
+                        .setFlags(REQUIRES_RENDERER_RELOAD)
+                        .build())
+                .add(OptionImpl.createBuilder(int.class, silhouetteOptions)
+                        .setName(new TranslatableText(OptionsTranslatableTextMap.gamertagSize + ".name"))
+                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.gamertagSize + ".tooltip"))
+                        .setControl(option -> new SliderControl(option, 1, 10, 1, ControlValueFormatter.number()))
+                        .setBinding((opts, value) -> opts.customStyle.gamertagSize = value, opts -> opts.customStyle.gamertagSize)
                         .setImpact(OptionImpact.LOW)
                         .build())
                 .build());
 
         return new OptionPage(new TranslatableText("silhouette.options.general"), ImmutableList.copyOf(groups));
     }
+
 }

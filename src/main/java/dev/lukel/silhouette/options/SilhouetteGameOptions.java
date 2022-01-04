@@ -31,8 +31,12 @@ public class SilhouetteGameOptions {
         public int red = 255;
         public int green = 255;
         public int blue = 255;
-        public int alpha = 255;
+        public int luminosity = 2;
+        public boolean blur = false;
+        public int gamertagSize = 5;
+        public SilhouetteDummyEnum customStyleGroupTitle = SilhouetteDummyEnum.BLANK;  // dummy enum so we can have a "title" row
     }
+
 
     private static final Gson GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

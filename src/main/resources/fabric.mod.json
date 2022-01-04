@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "silhouette",
-  "version": "${version}",
+  "version": "1.0.0",
 
   "name": "silhouette mod",
   "description": "display friendly player outlines through walls",
