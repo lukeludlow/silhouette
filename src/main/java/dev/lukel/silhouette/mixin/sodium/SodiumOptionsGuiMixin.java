@@ -34,7 +34,6 @@ public abstract class SodiumOptionsGuiMixin extends Screen {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void init(Screen previousScreen, CallbackInfo info) {
-        SilhouetteClientMod.LOGGER.info("silhouette inside SodiumOptionsGuiMixin init");
         pages.add(silhouetteOptionPage);
     }
 

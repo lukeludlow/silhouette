@@ -43,15 +43,12 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
     @Inject(method = "loadEntityOutlineShader", at = @At("HEAD"), cancellable = true)
     public void silhouette_loadEntityOutlineShader(CallbackInfo ci) {
         if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.APEX) {
-            SilhouetteClientMod.LOGGER.info("silhouette loading apex outline shader");
             loadSilhouetteShader("entity_outline_apex");
             ci.cancel();  // cancel so the regular implementation isn't called
         } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.CUSTOM) {
-            SilhouetteClientMod.LOGGER.info("silhouette loading custom outline shader");
             loadSilhouetteShader("entity_outline_custom");
             ci.cancel();  // cancel so the regular implementation isn't called
         } else if (SilhouetteClientMod.options().silhouette.style == SilhouetteVisualStyle.MINECRAFT){
-            SilhouetteClientMod.LOGGER.info("silhouette loading normal outline shader");
             // continue the function like normal
         }
     }
@@ -101,7 +98,6 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
 
     @Inject(method = "reload()V", at = @At("RETURN"))
     public void silhouette_reload(CallbackInfo ci) {
-        SilhouetteClientMod.LOGGER.info("silhouette_reload");
         this.loadEntityOutlineShader();
     }
 

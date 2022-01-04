@@ -24,7 +24,6 @@ public class SilhouetteGameOptionPages {
     private static final SilhouetteOptionsStorage silhouetteOptions = new SilhouetteOptionsStorage();
 
     public static OptionPage silhouette() {
-        SilhouetteClientMod.LOGGER.info("SilhouetteGameOptionPages silhouette()");
         List<OptionGroup> groups = new ArrayList<>();
 
         // main group
