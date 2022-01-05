@@ -25,6 +25,8 @@ public abstract class SodiumOptionsGuiMixin extends Screen {
     @Shadow
     private OptionPage currentPage;
 
+    @Shadow protected abstract void applyChanges();
+
     private final OptionPage silhouetteOptionPage = SilhouetteGameOptionPages.silhouette();
 
     // make compiler happy
@@ -54,6 +56,13 @@ public abstract class SodiumOptionsGuiMixin extends Screen {
             this.fillGradient(matrices, startX, startY, this.width, this.height, colorStart, colorEnd);
         } else {
             this.renderBackgroundTexture(vOffset);
+        }
+    }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    public void silhouette_render(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if (this.currentPage == silhouetteOptionPage) {
+            this.applyChanges();
         }
     }
 
