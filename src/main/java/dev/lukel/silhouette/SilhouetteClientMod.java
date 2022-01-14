@@ -2,6 +2,7 @@ package dev.lukel.silhouette;
 
 import dev.lukel.silhouette.options.SilhouetteGameOptions;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,8 @@ public class SilhouetteClientMod implements ClientModInitializer {
     public void onInitializeClient() {
         LOGGER.info("silhouette onInitializeClient");
         CONFIG = loadConfig();
+
+        HudRenderCallback.EVENT.register(new GamertagHudRenderer());
     }
 
     public static SilhouetteGameOptions options() {
