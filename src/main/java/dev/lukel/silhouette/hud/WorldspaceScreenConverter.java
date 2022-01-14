@@ -1,5 +1,6 @@
-package dev.lukel.silhouette;
+package dev.lukel.silhouette.hud;
 
+import dev.lukel.silhouette.SilhouetteClientMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -11,8 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 // thanks to https://forums.minecraftforge.net/topic/88562-116solved-3d-to-2d-conversion/
-public class ScreenConvert {
-    public static FinalTriple projectToPlayerView(double target_x, double target_y, double target_z, float partialTicks) {
+public class WorldspaceScreenConverter {
+    public static ScreenCoords projectToPlayerView(double target_x, double target_y, double target_z, float partialTicks) {
         /* The (centered) location on the screen of the given 3d point in the world.
          * Result is <dist right of center screen, dist up from center screen, is target in front of viewing plane> */
         MinecraftClient client = MinecraftClient.getInstance();
@@ -82,6 +83,6 @@ public class ScreenConvert {
 
         float half_height = (float) client.getWindow().getScaledHeight() / 2;
         float scale_factor = half_height / (result3f.getZ() * (float) Math.tan(Math.toRadians(fov / 2)));
-        return new FinalTriple(-result3f.getX() * scale_factor, -result3f.getY() * scale_factor, result3f.getZ() < 0);
+        return new ScreenCoords(-result3f.getX() * scale_factor, -result3f.getY() * scale_factor, result3f.getZ() < 0);
     }
 }

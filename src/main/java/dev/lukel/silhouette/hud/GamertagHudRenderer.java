@@ -1,5 +1,6 @@
-package dev.lukel.silhouette;
+package dev.lukel.silhouette.hud;
 
+import dev.lukel.silhouette.SilhouetteClientMod;
 import dev.lukel.silhouette.options.SilhouetteVisualStyle;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
@@ -26,7 +27,7 @@ public class GamertagHudRenderer implements HudRenderCallback {
             List<AbstractClientPlayerEntity> players = world.getPlayers();
             for (AbstractClientPlayerEntity p : players) {
                 if (p instanceof OtherClientPlayerEntity otherClientPlayer) {
-                    FinalTriple screenCoords = ScreenConvert.projectToPlayerView(otherClientPlayer.getX(), otherClientPlayer.getY(), otherClientPlayer.getZ(), tickDelta);
+                    ScreenCoords screenCoords = WorldspaceScreenConverter.projectToPlayerView(otherClientPlayer.getX(), otherClientPlayer.getY(), otherClientPlayer.getZ(), tickDelta);
                     float x = screenCoords.x;
                     float y = screenCoords.y;
                     x += (float)MinecraftClient.getInstance().getWindow().getScaledWidth() / 2;
