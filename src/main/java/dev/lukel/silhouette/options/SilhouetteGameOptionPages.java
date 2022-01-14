@@ -101,7 +101,7 @@ public class SilhouetteGameOptionPages {
                 .add(OptionImpl.createBuilder(int.class, silhouetteOptions)
                         .setName(new TranslatableText(OptionsTranslatableTextMap.gamertagSize + ".name"))
                         .setTooltip(new TranslatableText(OptionsTranslatableTextMap.gamertagSize + ".tooltip"))
-                        .setControl(option -> new SliderControl(option, 1, 10, 1, ControlValueFormatter.number()))
+                        .setControl(option -> new SliderControl(option, 1, 20, 1, ControlValueFormatter.number()))
                         .setBinding((opts, value) -> opts.customStyle.gamertagSize = value, opts -> opts.customStyle.gamertagSize)
                         .setImpact(OptionImpact.LOW)
                         .build())
