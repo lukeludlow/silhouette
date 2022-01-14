@@ -8,6 +8,7 @@
     "PlayerEntityMixin",
     "PlayerEntityRendererMixin",
     "WorldRendererMixin",
+    "EntityRendererMixin",
     "sodium.SodiumOptionsGuiMixin"
   ],
   "injectors": {

@@ -25,6 +25,7 @@ public class SilhouetteGameOptions {
         public boolean isEnabled = true;
         public SilhouetteVisualStyle style = SilhouetteVisualStyle.APEX;
         public boolean displayGamertags = true;
+        public boolean insaneDistance = true;
     }
 
     public static class CustomStyle {
@@ -34,7 +35,7 @@ public class SilhouetteGameOptions {
         public int luminosity = 2;
         public boolean blur = false;
         public int gamertagSize = 5;
-        public int extremeDistanceGamertagSize = 5;
+        public int insaneDistanceGamertagSize = 5;
         public SilhouetteDummyEnum customStyleGroupTitle = SilhouetteDummyEnum.BLANK;  // dummy enum so we can have a "title" row
     }
 

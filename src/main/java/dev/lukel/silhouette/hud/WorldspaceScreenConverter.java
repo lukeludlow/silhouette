@@ -23,7 +23,7 @@ public class WorldspaceScreenConverter {
 //        Vec3d camera_pos = client.cameraEntity.getClientCameraPosVec(partialTicks);
         Vec3d camera_pos = client.gameRenderer.getCamera().getPos();
 //        Vec3d cameraRotationVec = client.cameraEntity.getRotationVec(partialTicks);
-        Quaternion camera_rotation_conj = client.gameRenderer.getCamera().getRotation();
+        Quaternion camera_rotation_conj = client.gameRenderer.getCamera().getRotation().copy();  // .copy() is very important!!!
         camera_rotation_conj.conjugate();
 //        Vec3d cameraRotationVec = client.gameRenderer.getCamera().getRotation().t
 //        Quaternion camera_rotation_conj = Quaternion.fromEulerXyz((float)cameraRotationVec.x, (float)cameraRotationVec.y, (float)cameraRotationVec.z);
@@ -81,6 +81,7 @@ public class WorldspaceScreenConverter {
             throw new Error("getFOVModifier invocation caused error.", e);
         }
 
+//        double fov = client.options.fov;
         float half_height = (float) client.getWindow().getScaledHeight() / 2;
         float scale_factor = half_height / (result3f.getZ() * (float) Math.tan(Math.toRadians(fov / 2)));
         return new ScreenCoords(-result3f.getX() * scale_factor, -result3f.getY() * scale_factor, result3f.getZ() < 0);
