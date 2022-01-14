@@ -13,4 +13,5 @@ public class OptionsTranslatableTextMap {
     public static final String customStyleGroup = "silhouette.options.custom_style_group";
     public static final String insaneDistance = "silhouette.options.insane_distance";
     public static final String insaneDistanceGamertagSize = "silhouette.options.insane_distance_gamertag_size";
+    public static final String gamertagStyle = "silhouette.options.gamertag_style";
 }

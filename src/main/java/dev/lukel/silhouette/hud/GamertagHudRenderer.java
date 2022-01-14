@@ -1,25 +1,31 @@
 package dev.lukel.silhouette.hud;
 
 import dev.lukel.silhouette.SilhouetteClientMod;
+import dev.lukel.silhouette.options.SilhouetteGamertagStyle;
 import dev.lukel.silhouette.options.SilhouetteVisualStyle;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.OtherClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class GamertagHudRenderer implements HudRenderCallback {
 
-    private static final Set<Integer> playersOutsideFrustum = new HashSet<>();
+    private static final Set<Integer> playersInsideFrustum = new HashSet<>();
+    private static final Map<Integer, Integer> ticksSinceLastUpdate = new HashMap<>();
+    private static final int ticksLimit = 5;
 
     @Override
     public void onHudRender(MatrixStack matrices, float tickDelta) {
@@ -32,16 +38,29 @@ public class GamertagHudRenderer implements HudRenderCallback {
         if (world != null) {
             List<AbstractClientPlayerEntity> players = world.getPlayers();
             players.forEach(player -> {
-                if (player instanceof OtherClientPlayerEntity otherClientPlayer && playersOutsideFrustum.contains(otherClientPlayer.getId())) {
-                    ScreenCoords screenCoords = WorldspaceScreenConverter.projectToPlayerView(otherClientPlayer.getX(), otherClientPlayer.getY(), otherClientPlayer.getZ(), tickDelta);
-                    float x = screenCoords.x + ((float)client.getWindow().getScaledWidth() / 2);
-                    float y = screenCoords.y + ((float)client.getWindow().getScaledHeight() / 2);
-                    if (screenCoords.isTargetInFrontOfViewPlane) {
-                        drawGamertag(matrices, textRenderer, otherClientPlayer, x, y);
+                if (player instanceof OtherClientPlayerEntity otherClientPlayer) {
+                    updatePlayerTracking(otherClientPlayer);
+                    if (!playersInsideFrustum.contains(otherClientPlayer.getId()) && !isOtherPlayerTooClose(client, otherClientPlayer)) {
+                        ScreenCoords screenCoords = WorldspaceScreenConverter.projectToPlayerView(otherClientPlayer.getX(), otherClientPlayer.getY(), otherClientPlayer.getZ(), tickDelta);
+                        float x = screenCoords.x + ((float)client.getWindow().getScaledWidth() / 2);
+                        float y = screenCoords.y + ((float)client.getWindow().getScaledHeight() / 2);
+                        if (screenCoords.isTargetInFrontOfViewPlane) {
+                            drawGamertag(matrices, textRenderer, otherClientPlayer, x, y);
+                        }
                     }
                 }
             });
         }
+    }
+
+    private void updatePlayerTracking(OtherClientPlayerEntity player) {
+        int ticks = ticksSinceLastUpdate.getOrDefault(player.getId(), 0) + 1;
+        if (ticks > ticksLimit) {
+            playersInsideFrustum.remove(player.getId());
+            return;  // stop updating the map (idk just don't want it to hit int max lol)
+        }
+        ticksSinceLastUpdate.put(player.getId(), ticks);
+        SilhouetteClientMod.LOGGER.info("player {} has {} ticks since last update", player.getDisplayName().getString(), ticks);
     }
 
     private void drawGamertag(MatrixStack matrices, TextRenderer textRenderer, OtherClientPlayerEntity otherClientPlayer, float x, float y) {
@@ -80,11 +99,26 @@ public class GamertagHudRenderer implements HudRenderCallback {
         return red * 65536 + green * 256 + blue;
     }
 
-    public static void setPlayerOutsideFrustum(Entity player, boolean isOutsideFrustum) {
-        if (isOutsideFrustum) {
-            playersOutsideFrustum.add(player.getId());
+    // this helps so that we don't accidentally render insane mode tags at screen edges
+    private boolean isOtherPlayerTooClose(MinecraftClient client, OtherClientPlayerEntity otherClientPlayer) {
+        ClientPlayerEntity clientPlayer = client.player;
+        float viewDistance = client.gameRenderer.getViewDistance();
+        if (clientPlayer != null) {
+            double distance = clientPlayer.getPos().distanceTo(otherClientPlayer.getPos());
+            return distance < viewDistance;
         } else {
-            playersOutsideFrustum.remove(player.getId());
+            return false;
+        }
+    }
+
+    public static void setPlayerInsideFrustum(Entity player, boolean isInsideFrustum) {
+        if (player instanceof OtherClientPlayerEntity) {
+            if (isInsideFrustum) {
+                playersInsideFrustum.add(player.getId());
+            } else {
+                playersInsideFrustum.remove(player.getId());
+            }
+            ticksSinceLastUpdate.put(player.getId(), 0);
         }
     }
 

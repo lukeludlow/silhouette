@@ -62,28 +62,38 @@ public class WorldspaceScreenConverter {
 //            }
 //        }
 
-        // ----- adjust for fov -----
-        Method m;
-        float fov;
-        GameRenderer gameRenderer = MinecraftClient.getInstance().gameRenderer;
-        try {
-            m = gameRenderer.getClass().getDeclaredMethod("getFov", Camera.class, float.class, boolean.class);
-        } catch (NoSuchMethodException e) {
-            SilhouetteClientMod.LOGGER.error(e);
-            throw new Error("getFOVModifier method not present on GameRenderer class; cannot project to player screen.", e);
-        }
-        m.setAccessible(true);
-        try {
-            Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
-            fov = ((Double) m.invoke(gameRenderer, camera, partialTicks, true)).floatValue();
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            SilhouetteClientMod.LOGGER.error(e);
-            throw new Error("getFOVModifier invocation caused error.", e);
-        }
 
-//        double fov = client.options.fov;
+        double fov = getFov(partialTicks);
+
         float half_height = (float) client.getWindow().getScaledHeight() / 2;
         float scale_factor = half_height / (result3f.getZ() * (float) Math.tan(Math.toRadians(fov / 2)));
         return new ScreenCoords(-result3f.getX() * scale_factor, -result3f.getY() * scale_factor, result3f.getZ() < 0);
     }
+
+    public static double getFov(float partialTicks) {
+        try {
+            // ----- adjust for fov -----
+            Method m;
+            float fov;
+            GameRenderer gameRenderer = MinecraftClient.getInstance().gameRenderer;
+            try {
+                m = gameRenderer.getClass().getDeclaredMethod("getFov", Camera.class, float.class, boolean.class);
+            } catch (NoSuchMethodException e) {
+                SilhouetteClientMod.LOGGER.error(e);
+                throw new Error("getFOVModifier method not present on GameRenderer class; cannot project to player screen.", e);
+            }
+            m.setAccessible(true);
+            try {
+                Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
+                fov = ((Double) m.invoke(gameRenderer, camera, partialTicks, true)).floatValue();
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                SilhouetteClientMod.LOGGER.error(e);
+                throw new Error("getFOVModifier invocation caused error.", e);
+            }
+            return fov;
+        } catch (Error e) {
+            return MinecraftClient.getInstance().options.fov;
+        }
+    }
+
 }

@@ -24,6 +24,7 @@ public class SilhouetteGameOptions {
     public static class SilhouetteSettings {
         public boolean isEnabled = true;
         public SilhouetteVisualStyle style = SilhouetteVisualStyle.APEX;
+        public SilhouetteGamertagStyle gamertagStyle = SilhouetteGamertagStyle.MINECRAFT;
         public boolean displayGamertags = true;
         public boolean insaneDistance = true;
     }

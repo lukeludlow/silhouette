@@ -16,8 +16,8 @@ public abstract class EntityRendererMixin<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("TAIL"))
     public void shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof OtherClientPlayerEntity) {
-            boolean isPlayerOutsideFrustum = !cir.getReturnValue();
-            GamertagHudRenderer.setPlayerOutsideFrustum(entity, isPlayerOutsideFrustum);
+            boolean isPlayerInsideFrustum = cir.getReturnValue();
+            GamertagHudRenderer.setPlayerInsideFrustum(entity, isPlayerInsideFrustum);
         }
     }
 
