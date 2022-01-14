@@ -1,9 +1,5 @@
 package dev.lukel.silhouette.options;
 
-import java.util.Map;
-
-import static java.util.Map.entry;
-
 public class OptionsTranslatableTextMap {
     public static final String isEnabled = "silhouette.options.enabled";
     public static final String style = "silhouette.options.visual_style";
@@ -15,4 +11,5 @@ public class OptionsTranslatableTextMap {
     public static final String blurDir = "silhouette.options.blur_dir";
     public static final String gamertagSize = "silhouette.options.gamertag_size";
     public static final String customStyleGroup = "silhouette.options.custom_style_group";
+    public static final String extremeDistanceGamertagSize = "silhouette.options.extreme_distance_gamertag_size";
 }

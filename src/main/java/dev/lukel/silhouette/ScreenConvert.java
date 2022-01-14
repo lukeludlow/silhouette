@@ -3,17 +3,14 @@ package dev.lukel.silhouette;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import org.joml.Vector3f;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
+// thanks to https://forums.minecraftforge.net/topic/88562-116solved-3d-to-2d-conversion/
 public class ScreenConvert {
     public static FinalTriple projectToPlayerView(double target_x, double target_y, double target_z, float partialTicks) {
         /* The (centered) location on the screen of the given 3d point in the world.

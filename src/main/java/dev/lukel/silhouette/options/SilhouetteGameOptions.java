@@ -34,6 +34,7 @@ public class SilhouetteGameOptions {
         public int luminosity = 2;
         public boolean blur = false;
         public int gamertagSize = 5;
+        public int extremeDistanceGamertagSize = 5;
         public SilhouetteDummyEnum customStyleGroupTitle = SilhouetteDummyEnum.BLANK;  // dummy enum so we can have a "title" row
     }
 

@@ -1,12 +1,10 @@
 package dev.lukel.silhouette.options;
 
 import com.google.common.collect.ImmutableList;
-import dev.lukel.silhouette.SilhouetteClientMod;
 import me.jellysquid.mods.sodium.client.gui.options.OptionGroup;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpact;
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpl;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
-import me.jellysquid.mods.sodium.client.gui.options.control.ControlElement;
 import me.jellysquid.mods.sodium.client.gui.options.control.ControlValueFormatter;
 import me.jellysquid.mods.sodium.client.gui.options.control.CyclingControl;
 import me.jellysquid.mods.sodium.client.gui.options.control.SliderControl;
@@ -103,6 +101,13 @@ public class SilhouetteGameOptionPages {
                         .setTooltip(new TranslatableText(OptionsTranslatableTextMap.gamertagSize + ".tooltip"))
                         .setControl(option -> new SliderControl(option, 1, 20, 1, ControlValueFormatter.number()))
                         .setBinding((opts, value) -> opts.customStyle.gamertagSize = value, opts -> opts.customStyle.gamertagSize)
+                        .setImpact(OptionImpact.LOW)
+                        .build())
+                .add(OptionImpl.createBuilder(int.class, silhouetteOptions)
+                        .setName(new TranslatableText(OptionsTranslatableTextMap.extremeDistanceGamertagSize + ".name"))
+                        .setTooltip(new TranslatableText(OptionsTranslatableTextMap.extremeDistanceGamertagSize + ".tooltip"))
+                        .setControl(option -> new SliderControl(option, 1, 20, 1, ControlValueFormatter.number()))
+                        .setBinding((opts, value) -> opts.customStyle.extremeDistanceGamertagSize = value, opts -> opts.customStyle.extremeDistanceGamertagSize)
                         .setImpact(OptionImpact.LOW)
                         .build())
                 .build());

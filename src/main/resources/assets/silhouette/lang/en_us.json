@@ -24,6 +24,8 @@
   "silhouette.options.blur_dir.tooltip": "turn outline blur on or off",
   "silhouette.options.gamertag_size.name": "gamertag size",
   "silhouette.options.gamertag_size.tooltip": "change text size of other player names. default/recommended is 5.",
+  "silhouette.options.extreme_distance_gamertag_size.name": "extreme distance gamertag size",
+  "silhouette.options.extreme_distance_gamertag_size.tooltip": "change text size of other player names when extremely far away. default/recommended is 5.",
   "silhouette.option_impact.low": "Low",
   "silhouette.option_impact.medium": "Medium",
   "silhouette.option_impact.high": "High",
