@@ -50,9 +50,4 @@ public class SilhouetteClientMod implements ClientModInitializer {
             return config;
         }
     }
-
-
-
-
-
 }

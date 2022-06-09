@@ -70,12 +70,8 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
                 this.entityOutlineShader = new ShaderEffect(this.client.getTextureManager(), this.client.getResourceManager(), this.client.getFramebuffer(), identifier);
                 this.entityOutlineShader.setupDimensions(this.client.getWindow().getFramebufferWidth(), this.client.getWindow().getFramebufferHeight());
                 this.entityOutlinesFramebuffer = this.entityOutlineShader.getSecondaryTarget("final");
-            } catch (IOException var3) {
-                SilhouetteClientMod.LOGGER.warn("Failed to load shader: {}", identifier, var3);
-                this.entityOutlineShader = null;
-                this.entityOutlinesFramebuffer = null;
-            } catch (JsonSyntaxException var4) {
-                SilhouetteClientMod.LOGGER.warn("Failed to parse shader: {}", identifier, var4);
+            } catch (IOException | JsonSyntaxException e) {
+                SilhouetteClientMod.LOGGER.warn("Failed to load shader: {}", identifier, e);
                 this.entityOutlineShader = null;
                 this.entityOutlinesFramebuffer = null;
             }

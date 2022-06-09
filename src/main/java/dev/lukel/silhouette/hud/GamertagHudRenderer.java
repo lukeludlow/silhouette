@@ -60,7 +60,6 @@ public class GamertagHudRenderer implements HudRenderCallback {
             return;  // stop updating the map (idk just don't want it to hit int max lol)
         }
         ticksSinceLastUpdate.put(player.getId(), ticks);
-        SilhouetteClientMod.LOGGER.info("player {} has {} ticks since last update", player.getDisplayName().getString(), ticks);
     }
 
     private void drawGamertag(MatrixStack matrices, TextRenderer textRenderer, OtherClientPlayerEntity otherClientPlayer, float x, float y) {
