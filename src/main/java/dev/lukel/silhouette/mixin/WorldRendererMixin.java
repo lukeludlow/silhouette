@@ -16,12 +16,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.SynchronousResourceReloader;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.IOException;
 
@@ -91,6 +93,11 @@ public abstract class WorldRendererMixin implements SynchronousResourceReloader 
         }
     }
 
+    @Inject(method = "isRenderingReady", at = @At("HEAD"), cancellable = true)
+    public void silhouette_isRenderingReady(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        cir.setReturnValue(true);
+        cir.cancel();
+    }
 
     @Inject(method = "reload()V", at = @At("RETURN"))
     public void silhouette_reload(CallbackInfo ci) {
