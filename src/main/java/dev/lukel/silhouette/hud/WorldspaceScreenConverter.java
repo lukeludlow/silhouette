@@ -92,7 +92,7 @@ public class WorldspaceScreenConverter {
             }
             return fov;
         } catch (Error e) {
-            return MinecraftClient.getInstance().options.fov;
+            return MinecraftClient.getInstance().options.fov.getValue();
         }
     }
 
